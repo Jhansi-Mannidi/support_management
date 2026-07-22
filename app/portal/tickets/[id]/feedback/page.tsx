@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { Zap, ArrowLeft, CheckCircle2, Star } from 'lucide-react'
+import { CheckCircle2, Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PageContainer } from '@/components/motion/motion-primitives'
 
@@ -41,7 +40,7 @@ export default function CSATPage() {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <PageContainer className="flex min-h-[60vh] items-center justify-center py-8">
         <div className="w-full max-w-sm text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-bg">
             <CheckCircle2 className="h-8 w-8 text-success" />
@@ -60,31 +59,12 @@ export default function CSATPage() {
             </button>
           </Link>
         </div>
-      </div>
+      </PageContainer>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-sm">
-        <div className="flex w-full items-center justify-between px-4 md:px-6 py-3">
-          <div className="flex items-center gap-3">
-            <Link href={`/portal/tickets/${ticketId}`}>
-              <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted" aria-label="Back">
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-brand" />
-              <span className="text-[13px] font-bold">Support Feedback</span>
-            </div>
-          </div>
-          <ThemeToggle />
-        </div>
-      </header>
-
-      <PageContainer className="w-full px-4 md:px-6 py-10">
+    <PageContainer className="w-full py-10">
         {/* Ticket context */}
         <div className="mb-6 rounded-xl border border-border bg-card p-4">
           <p className="text-[11px] text-muted-foreground">Ticket resolved</p>
@@ -208,6 +188,5 @@ export default function CSATPage() {
           </Link>
         </div>
       </PageContainer>
-    </div>
   )
 }

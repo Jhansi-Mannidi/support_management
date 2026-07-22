@@ -2,7 +2,7 @@
 
 import { AppShell } from '@/components/app-shell'
 
-type ShellSegment = 'app' | 'config' | 'falcon' | 'search' | 'settings'
+type ShellSegment = 'app' | 'config' | 'falcon' | 'search' | 'settings' | 'portal'
 
 const SEGMENT_DEFAULTS: Record<
   ShellSegment,
@@ -13,6 +13,7 @@ const SEGMENT_DEFAULTS: Record<
   falcon: { role: 'falcon', userName: 'Vikram Rao', userInitials: 'VR' },
   search: { role: 'responder', userName: 'Arjun Mehta', userInitials: 'AM' },
   settings: { role: 'responder', userName: 'Arjun Mehta', userInitials: 'AM' },
+  portal: { role: 'requester', userName: 'Priya Nair', userInitials: 'PN' },
 }
 
 export function AuthenticatedShell({

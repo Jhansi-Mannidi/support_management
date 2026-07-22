@@ -114,7 +114,7 @@ export default function HelpPage() {
           </div>
           <p className="text-[12px] text-muted-foreground mb-3">Connect with VoltusWave platform support during business hours.</p>
           <Link
-            href="/portal/new?category=technical"
+            href="/app/raise?category=technical"
             className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3 py-2 text-[12px] font-semibold text-white hover:bg-brand-hover"
           >
             Start a support ticket <ExternalLink className="h-3.5 w-3.5" />

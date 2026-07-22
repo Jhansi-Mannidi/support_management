@@ -30,7 +30,9 @@ import {
   X,
   Home,
   MessageSquarePlus,
+  ArrowLeft,
 } from 'lucide-react'
+import { getCurrentPageTitle, getMobileBackHref } from '@/lib/breadcrumbs'
 
 type UserRole = 'requester' | 'responder' | 'admin' | 'falcon'
 
@@ -59,7 +61,12 @@ const navItems: NavItem[] = [
     roles: ['responder', 'admin', 'falcon'],
     activePaths: ['/app/queue', '/app/tickets'],
   },
-  { label: 'Raise a Ticket', href: '/portal/new', icon: Plus, roles: ['requester'], activePaths: ['/portal/new'] },
+  {
+    label: 'Raise a Ticket',
+    href: '/app/raise',
+    icon: Plus,
+    activePaths: ['/app/raise', '/portal/new'],
+  },
   {
     label: 'My Tickets',
     href: '/portal',
@@ -295,13 +302,25 @@ export function AppShell({
     </nav>
   )
 
-  const mobileNavItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/app/dashboard', activePaths: ['/app/dashboard'] },
-    { icon: Inbox, label: 'Queue', href: '/app/queue/board', activePaths: ['/app/queue', '/app/tickets'] },
-    { icon: MessageSquarePlus, label: 'Raise', href: '/portal/new', activePaths: ['/portal/new'] },
-    { icon: Search, label: 'Search', href: '/search', activePaths: ['/search'] },
-    { icon: User, label: 'Profile', href: '/settings', activePaths: ['/settings'] },
-  ]
+  const mobileBackHref = getMobileBackHref(pathname ?? '', { hash: locationHash })
+  const mobilePageTitle = getCurrentPageTitle(pathname ?? '', { hash: locationHash })
+
+  const mobileNavItems =
+    currentRole === 'requester'
+      ? [
+          { icon: Home, label: 'Tickets', href: '/portal', activePaths: ['/portal', '/portal/tickets'] },
+          { icon: MessageSquarePlus, label: 'Raise', href: '/app/raise', activePaths: ['/app/raise', '/portal/new'] },
+          { icon: Bell, label: 'Alerts', href: '/portal/notifications', activePaths: ['/portal/notifications'] },
+          { icon: Search, label: 'Search', href: '/search', activePaths: ['/search'] },
+          { icon: User, label: 'Profile', href: '/settings', activePaths: ['/settings'] },
+        ]
+      : [
+          { icon: LayoutDashboard, label: 'Dashboard', href: '/app/dashboard', activePaths: ['/app/dashboard'] },
+          { icon: Inbox, label: 'Queue', href: '/app/queue/board', activePaths: ['/app/queue', '/app/tickets'] },
+          { icon: MessageSquarePlus, label: 'Raise', href: '/app/raise', activePaths: ['/app/raise', '/portal/new'] },
+          { icon: Search, label: 'Search', href: '/search', activePaths: ['/search'] },
+          { icon: User, label: 'Profile', href: '/settings', activePaths: ['/settings'] },
+        ]
 
   return (
     <AppPreferencesProvider>
@@ -341,101 +360,199 @@ export function AppShell({
         )}
       </AnimatePresence>
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden lg:rounded-xl lg:border lg:border-border lg:bg-card lg:shadow-sm">
-        <header className="grid h-12 shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b border-border bg-card/95 backdrop-blur-sm px-3 sm:px-4 lg:grid-cols-[minmax(0,1fr)_minmax(360px,640px)_minmax(0,1fr)] lg:gap-4">
-          <div className="flex min-w-0 items-center gap-2">
-            <button
-              type="button"
-              className="rounded-md p-1.5 text-muted-foreground hover:bg-muted lg:hidden"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Open navigation"
-            >
-              {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden xl:rounded-xl xl:border xl:border-border xl:bg-card xl:shadow-sm">
+        <header className="shrink-0 border-b border-border bg-card/95 backdrop-blur-sm">
+          {/* Mobile & tablet: stacked rows — search never shares a row with icons */}
+          <div className="app-header-mobile">
+            <div className="app-header-mobile-toolbar">
+              {mobileBackHref ? (
+                <Link
+                  href={mobileBackHref}
+                  className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-muted"
+                  aria-label="Go back"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              ) : null}
+              <button
+                type="button"
+                className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-muted"
+                onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label="Open navigation"
+              >
+                {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
 
-            <div className="flex items-center gap-1.5 lg:hidden">
-              <Zap className="h-4 w-4 text-brand" />
-              <span className="text-[13px] font-bold">VoltusWave</span>
+              <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden pr-1">
+                {!mobileBackHref && <Zap className="h-4 w-4 shrink-0 text-brand" />}
+                <span className="truncate text-[13px] font-bold leading-none">
+                  {mobileBackHref ? mobilePageTitle : 'VoltusWave'}
+                </span>
+              </div>
+
+              <div className="app-header-mobile-actions">
+                <Link
+                  href={currentRole === 'requester' ? '/portal/notifications' : '/app/notifications'}
+                  className="shrink-0"
+                >
+                  <button
+                    type="button"
+                    className="relative flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label="Notifications"
+                  >
+                    <Bell className="h-4 w-4" />
+                    <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand ring-2 ring-card" />
+                  </button>
+                </Link>
+
+                <ThemeToggle className="hidden min-[420px]:inline-flex !p-1.5" />
+
+                <Link href="/help" className="hidden shrink-0 min-[420px]:block">
+                  <button
+                    type="button"
+                    className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label="Help"
+                  >
+                    <HelpCircle className="h-4 w-4" />
+                  </button>
+                </Link>
+
+                <div className="relative shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setProfileOpen(!profileOpen)}
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white"
+                    aria-label="Profile menu"
+                    aria-expanded={profileOpen}
+                  >
+                    {userInitials}
+                  </button>
+                  <AnimatePresence mode="wait">
+                    {profileOpen && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40 xl:hidden"
+                          aria-hidden
+                          onClick={() => setProfileOpen(false)}
+                        />
+                        <motion.div
+                          variants={dropdownVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="exit"
+                          className="absolute right-0 top-9 z-50 w-52 rounded-xl border border-border bg-card shadow-xl xl:hidden"
+                        >
+                          <div className="border-b border-border px-4 py-3">
+                            <p className="text-[13px] font-semibold">{userName}</p>
+                            <p className="text-[11px] text-muted-foreground">{roleLabel[currentRole]}</p>
+                          </div>
+                          <div className="py-1">
+                            <Link href="/settings" className="flex items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-muted" onClick={() => setProfileOpen(false)}>
+                              <User className="h-3.5 w-3.5 text-muted-foreground" /> Profile & Settings
+                            </Link>
+                            <button
+                              type="button"
+                              className="flex w-full items-center gap-2 px-4 py-2 text-[13px] text-danger transition-colors hover:bg-danger-bg"
+                              onClick={() => router.push('/sign-in')}
+                            >
+                              <LogOut className="h-3.5 w-3.5" /> Sign out
+                            </button>
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
             </div>
 
-            <span className="hidden truncate text-[12px] font-medium text-muted-foreground lg:block">{tenant}</span>
+            <div className="app-header-mobile-search">
+              <GlobalHeaderSearch compact className="w-full" />
+            </div>
           </div>
 
-          <div className="flex min-w-0 justify-center px-0.5">
-            <GlobalHeaderSearch className="w-full max-w-[640px]" />
-          </div>
+          {/* Desktop: single row */}
+          <div className="app-header-desktop">
+            <div className="flex min-w-0 items-center gap-2">
+              <span className="truncate text-[12px] font-medium text-muted-foreground">{tenant}</span>
+            </div>
 
-          <div className="flex items-center justify-end gap-1 sm:gap-1.5">
-            <RegionFilter className="hidden sm:block" />
+            <div className="flex min-w-0 justify-center">
+              <GlobalHeaderSearch className="w-full max-w-[640px]" />
+            </div>
 
-            <Link href="/app/notifications">
-              <button
-                type="button"
-                className="relative rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                aria-label="Notifications"
-              >
-                <Bell className="h-4 w-4" />
-                <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-brand" />
-              </button>
-            </Link>
+            <div className="flex items-center justify-end gap-1.5">
+              <RegionFilter />
 
-            <ThemeToggle />
+              <Link href={currentRole === 'requester' ? '/portal/notifications' : '/app/notifications'}>
+                <button
+                  type="button"
+                  className="relative flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  aria-label="Notifications"
+                >
+                  <Bell className="h-4 w-4" />
+                  <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-brand ring-2 ring-card" />
+                </button>
+              </Link>
 
-            <Link href="/help">
-              <button
-                type="button"
-                className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                aria-label="Help"
-              >
-                <HelpCircle className="h-4 w-4" />
-              </button>
-            </Link>
+              <ThemeToggle />
 
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white"
-                aria-label="Profile menu"
-                aria-expanded={profileOpen}
-              >
-                {userInitials}
-              </button>
-              <AnimatePresence mode="wait">
-                {profileOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      aria-hidden
-                      onClick={() => setProfileOpen(false)}
-                    />
-                    <motion.div
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className="absolute right-0 top-8 z-50 w-52 rounded-xl border border-border bg-card shadow-xl"
-                    >
-                    <div className="border-b border-border px-4 py-3">
-                      <p className="text-[13px] font-semibold">{userName}</p>
-                      <p className="text-[11px] text-muted-foreground">{roleLabel[currentRole]}</p>
-                    </div>
-                    <div className="py-1">
-                      <Link href="/settings" className="flex items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-muted" onClick={() => setProfileOpen(false)}>
-                        <User className="h-3.5 w-3.5 text-muted-foreground" /> Profile & Settings
-                      </Link>
-                      <button
-                        type="button"
-                        className="flex w-full items-center gap-2 px-4 py-2 text-[13px] text-danger transition-colors hover:bg-danger-bg"
-                        onClick={() => router.push('/sign-in')}
+              <Link href="/help">
+                <button
+                  type="button"
+                  className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  aria-label="Help"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                </button>
+              </Link>
+
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white"
+                  aria-label="Profile menu"
+                  aria-expanded={profileOpen}
+                >
+                  {userInitials}
+                </button>
+                <AnimatePresence mode="wait">
+                  {profileOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40 hidden xl:block"
+                        aria-hidden
+                        onClick={() => setProfileOpen(false)}
+                      />
+                      <motion.div
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="absolute right-0 top-9 z-50 hidden w-52 rounded-xl border border-border bg-card shadow-xl xl:block"
                       >
-                        <LogOut className="h-3.5 w-3.5" /> Sign out
-                      </button>
-                    </div>
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
+                        <div className="border-b border-border px-4 py-3">
+                          <p className="text-[13px] font-semibold">{userName}</p>
+                          <p className="text-[11px] text-muted-foreground">{roleLabel[currentRole]}</p>
+                        </div>
+                        <div className="py-1">
+                          <Link href="/settings" className="flex items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-muted" onClick={() => setProfileOpen(false)}>
+                            <User className="h-3.5 w-3.5 text-muted-foreground" /> Profile & Settings
+                          </Link>
+                          <button
+                            type="button"
+                            className="flex w-full items-center gap-2 px-4 py-2 text-[13px] text-danger transition-colors hover:bg-danger-bg"
+                            onClick={() => router.push('/sign-in')}
+                          >
+                            <LogOut className="h-3.5 w-3.5" /> Sign out
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
         </header>
@@ -459,7 +576,7 @@ export function AppShell({
           </AnimatePresence>
         </main>
 
-        <nav className="flex h-14 shrink-0 items-center justify-around border-t border-border bg-card/95 backdrop-blur-sm px-2 lg:hidden">
+        <nav className="flex h-14 shrink-0 items-center justify-around border-t border-border bg-card/95 backdrop-blur-sm px-2 xl:hidden">
           {mobileNavItems.map(({ icon: Icon, label, href, activePaths }) => {
             const isActive = activePaths.some((pattern) => {
               const [path, hash] = pattern.split('#')

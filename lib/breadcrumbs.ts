@@ -147,12 +147,8 @@ export function resolveBreadcrumbs(
     return [{ label: 'Portal', href: '/portal' }, { label: 'My Tickets' }]
   }
 
-  if (pathname === '/portal/new') {
-    return [
-      { label: 'Portal', href: '/portal' },
-      { label: 'My Tickets', href: '/portal' },
-      { label: 'Raise a Ticket' },
-    ]
+  if (pathname === '/app/raise' || pathname === '/portal/new') {
+    return withWorkspace([{ label: 'Raise a Ticket' }])
   }
 
   if (pathname.startsWith('/portal/tickets/')) {
@@ -180,4 +176,47 @@ export function resolveBreadcrumbs(
   }
 
   return withWorkspace([{ label: titleCase(segments[segments.length - 1] ?? 'Page') }])
+}
+
+const MOBILE_ROOT_PATHS = new Set([
+  '/app/dashboard',
+  '/app/raise',
+  '/portal',
+  '/app/queue/board',
+  '/app/queue/list',
+  '/search',
+  '/settings',
+  '/config',
+  '/falcon/console',
+  '/help',
+  '/app/notifications',
+  '/portal/notifications',
+])
+
+export function getMobileBackHref(
+  pathname: string,
+  options?: { hash?: string; ticketLabel?: string; categoryLabel?: string },
+): string | null {
+  if (MOBILE_ROOT_PATHS.has(pathname)) return null
+
+  const items = resolveBreadcrumbs(pathname, options)
+  for (let i = items.length - 2; i >= 0; i--) {
+    const href = items[i].href
+    if (href) {
+      const base = href.split('#')[0]
+      if (base !== pathname) return href
+    }
+  }
+  return null
+}
+
+export function getCurrentPageTitle(
+  pathname: string,
+  options?: { hash?: string; ticketLabel?: string; categoryLabel?: string; pageLabel?: string },
+): string {
+  const items = resolveBreadcrumbs(pathname, options)
+  if (options?.pageLabel && items.length > 0) {
+    return options.pageLabel
+  }
+  return items[items.length - 1]?.label ?? 'VoltusWave'
 }

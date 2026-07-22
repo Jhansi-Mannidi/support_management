@@ -301,4 +301,21 @@
   .kanban-column {
     @apply flex h-full min-h-[12rem] min-w-[240px] flex-1 flex-col rounded-xl border border-border bg-surface-2;
   }
+
+  /* App shell header — force stacked mobile layout (search on its own row) */
+  .app-header-mobile {
+    @apply flex flex-col xl:hidden;
+  }
+  .app-header-mobile-toolbar {
+    @apply flex h-11 shrink-0 items-center gap-1 px-3;
+  }
+  .app-header-mobile-actions {
+    @apply flex shrink-0 items-center gap-0.5;
+  }
+  .app-header-mobile-search {
+    @apply w-full shrink-0 border-t border-border/50 bg-muted/15 px-3 py-2;
+  }
+  .app-header-desktop {
+    @apply hidden h-12 grid-cols-[minmax(0,1fr)_minmax(360px,640px)_minmax(0,1fr)] items-center gap-4 px-4 xl:grid;
+  }
 }

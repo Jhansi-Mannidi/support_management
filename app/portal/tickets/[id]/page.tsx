@@ -3,11 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ThemeToggle } from '@/components/theme-toggle'
 import { HumanStatusBadge } from '@/components/ui/status-badge'
 import { PriorityBadge } from '@/components/ui/priority-badge'
 import {
-  Zap, ArrowLeft, Paperclip, Send, CheckCircle2, RefreshCw,
+  ArrowLeft, Paperclip, Send, CheckCircle2, RefreshCw,
   Lock, User, AlertTriangle, Star, Bell, X, FileText, ChevronRight
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -59,29 +58,14 @@ export default function RequesterTicketDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-sm">
-        <div className="flex w-full items-center justify-between px-4 md:px-6 py-3">
-          <div className="flex items-center gap-3">
-            <Link href="/portal">
-              <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted" aria-label="Back to portal">
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-brand" />
-              <span className="font-mono text-[13px] font-bold text-muted-foreground">{ticketId}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white">PN</div>
-          </div>
-        </div>
-      </header>
-
-      <PageContainer className="w-full px-4 md:px-6 py-6">
+    <PageContainer className="w-full py-6">
+      <Link
+        href="/portal"
+        className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:text-brand lg:hidden"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to my tickets
+      </Link>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Main thread */}
           <div className="lg:col-span-2 space-y-6">
@@ -284,6 +268,5 @@ export default function RequesterTicketDetailPage() {
           </div>
         </div>
       </PageContainer>
-    </div>
   )
 }

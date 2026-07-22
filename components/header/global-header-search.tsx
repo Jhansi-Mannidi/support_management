@@ -14,7 +14,13 @@ import { useAppPreferences } from '@/components/providers/app-preferences-provid
 import { dropdownVariants } from '@/lib/motion'
 import { PriorityBadge } from '@/components/ui/priority-badge'
 
-export function GlobalHeaderSearch({ className }: { className?: string }) {
+export function GlobalHeaderSearch({
+  className,
+  compact = false,
+}: {
+  className?: string
+  compact?: boolean
+}) {
   const router = useRouter()
   const { region } = useAppPreferences()
   const [query, setQuery] = useState('')
@@ -63,9 +69,14 @@ export function GlobalHeaderSearch({ className }: { className?: string }) {
   }
 
   return (
-    <div ref={rootRef} className={cn('relative w-full', className)}>
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+    <div ref={rootRef} className={cn('relative min-w-0 w-full max-w-full', className)}>
+      <div className="relative w-full">
+        <Search
+          className={cn(
+            'pointer-events-none absolute top-1/2 -translate-y-1/2 text-muted-foreground',
+            compact ? 'left-2.5 h-3.5 w-3.5' : 'left-3 h-4 w-4 sm:left-3 sm:h-4 sm:w-4',
+          )}
+        />
         <input
           ref={inputRef}
           type="search"
@@ -87,15 +98,22 @@ export function GlobalHeaderSearch({ className }: { className?: string }) {
               goToSearchPage()
             }
           }}
-          placeholder="Search tickets, requesters, IDs…"
+          placeholder={compact ? 'Search tickets…' : 'Search tickets, requesters, IDs…'}
           aria-label="Global search"
           aria-expanded={showDropdown}
           aria-autocomplete="list"
-          className="focus-ring h-9 w-full rounded-lg border border-border bg-muted/40 py-2 pl-9 pr-20 text-[13px] text-foreground placeholder:text-muted-foreground transition-colors hover:bg-muted/60 focus:bg-card"
+          className={cn(
+            'focus-ring w-full max-w-full rounded-lg border border-border bg-muted/40 text-foreground placeholder:text-muted-foreground transition-colors hover:bg-muted/60 focus:bg-card',
+            compact
+              ? 'h-8 py-1.5 pl-8 pr-3 text-[12px]'
+              : 'h-9 py-2 pl-9 pr-3 text-[13px] sm:pr-20',
+          )}
         />
-        <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground sm:inline">
-          ⌘K
-        </kbd>
+        {!compact && (
+          <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground sm:inline">
+            ⌘K
+          </kbd>
+        )}
       </div>
 
       <AnimatePresence>

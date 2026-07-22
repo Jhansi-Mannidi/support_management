@@ -3,9 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { EmptyState } from '@/components/ui/empty-state'
-import { MotionButton } from '@/components/motion/motion-primitives'
+import { MotionButton, MotionItem, MotionStagger, PageContainer } from '@/components/motion/motion-primitives'
 import { useToast } from '@/components/ui/toast-provider'
 import { ClearFiltersButton, ListToolbarActions } from '@/components/ui/list-toolbar-actions'
 import { exportTickets } from '@/lib/export-utils'
@@ -18,12 +16,9 @@ import type { TicketStatus } from '@/components/ui/status-badge'
 import {
   Plus,
   Search,
-  Zap,
   Package,
   DollarSign,
   Bug,
-  Bell,
-  User,
   ChevronRight,
   CheckCircle2,
   RefreshCw,
@@ -71,34 +66,7 @@ export default function PortalHomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Portal top bar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur-md">
-        <div className="flex w-full items-center justify-between px-4 md:px-6 py-3">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-[13px] font-bold text-foreground">VoltusWave Support</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/portal/notifications">
-              <button className="relative rounded-md p-1.5 text-muted-foreground hover:bg-muted" aria-label="Notifications">
-                <Bell className="h-4 w-4" />
-                <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-brand" />
-              </button>
-            </Link>
-            <ThemeToggle />
-            <Link href="/settings">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white cursor-pointer hover:opacity-90">
-                PN
-              </div>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main className="w-full px-4 md:px-6 pb-24 pt-6">
+    <PageContainer className="pb-6 pt-2">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -115,7 +83,7 @@ export default function PortalHomePage() {
             <p className="mt-0.5 text-sm text-muted-foreground">How can we help you today?</p>
           </motion.div>
           <motion.div variants={staggerItemVariants}>
-          <Link href="/portal/new">
+          <Link href="/app/raise">
             <MotionButton className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-[14px] font-semibold text-white shadow-md shadow-brand/20 hover:bg-brand-hover">
               <Plus className="h-4 w-4" />
               Raise a ticket
@@ -132,9 +100,9 @@ export default function PortalHomePage() {
           className="mt-6 grid grid-cols-3 gap-3"
         >
           {[
-            { icon: Package, label: 'Shipment / Tracking issue', href: '/portal/new?category=shipment', color: 'text-info bg-info-bg border-info/20' },
-            { icon: DollarSign, label: 'Billing question', href: '/portal/new?category=billing', color: 'text-warning bg-warning-bg border-warning/20' },
-            { icon: Bug, label: 'Report a bug', href: '/portal/new?category=bug', color: 'text-danger bg-danger-bg border-danger/20' },
+            { icon: Package, label: 'Shipment / Tracking issue', href: '/app/raise?category=shipment', color: 'text-info bg-info-bg border-info/20' },
+            { icon: DollarSign, label: 'Billing question', href: '/app/raise?category=billing', color: 'text-warning bg-warning-bg border-warning/20' },
+            { icon: Bug, label: 'Report a bug', href: '/app/raise?category=bug', color: 'text-danger bg-danger-bg border-danger/20' },
           ].map(({ icon: Icon, label, href, color }) => (
             <motion.div key={label} variants={staggerItemVariants}>
             <Link href={href}>
@@ -209,7 +177,7 @@ export default function PortalHomePage() {
               title="No tickets found"
               description="You haven't raised any tickets in this category yet."
               action={
-                <Link href="/portal/new">
+                <Link href="/app/raise">
                   <MotionButton className="rounded-lg bg-brand px-4 py-2 text-[13px] font-semibold text-white hover:bg-brand-hover">
                     Raise a ticket
                   </MotionButton>
@@ -294,17 +262,6 @@ export default function PortalHomePage() {
           )}
           </AnimatePresence>
         </div>
-      </main>
-
-      {/* Sticky mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card p-4 sm:hidden">
-        <Link href="/portal/new">
-          <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand py-3 text-[14px] font-semibold text-white">
-            <Plus className="h-4 w-4" />
-            Raise a ticket
-          </button>
-        </Link>
-      </div>
-    </div>
+    </PageContainer>
   )
 }
