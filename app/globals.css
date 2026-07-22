@@ -1,0 +1,304 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-navy: var(--navy);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-2: var(--surface-2);
+  --color-overlay: var(--overlay);
+  --color-sla-ontrack: var(--sla-ontrack);
+  --color-sla-atrisk: var(--sla-atrisk);
+  --color-sla-breached: var(--sla-breached);
+  --color-sla-paused: var(--sla-paused);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --font-sans: 'Inter', 'Inter Fallback', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
+}
+
+/* ─── LIGHT MODE ─────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --brand: #F26722;
+  --brand-hover: #E0561A;
+  --brand-subtle: #FEF0E8;
+  --navy: #0B1E3B;
+
+  /* Surfaces */
+  --background: #F7F8FA;
+  --surface-elevated: #FFFFFF;
+  --surface-2: #F0F2F5;
+  --foreground: #0D1526;
+  --card: #FFFFFF;
+  --card-foreground: #0D1526;
+  --popover: #FFFFFF;
+  --popover-foreground: #0D1526;
+
+  /* Semantic */
+  --primary: #F26722;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EFF1F5;
+  --secondary-foreground: #0D1526;
+  --muted: #EFF1F5;
+  --muted-foreground: #6B7280;
+  --accent: #FEF0E8;
+  --accent-foreground: #C24E12;
+  --destructive: #DC2626;
+  --border: #E2E5EB;
+  --input: #E2E5EB;
+  --ring: #F26722;
+
+  /* Status colors */
+  --success: #16A34A;
+  --success-bg: #DCFCE7;
+  --warning: #D97706;
+  --warning-bg: #FEF3C7;
+  --danger: #DC2626;
+  --danger-bg: #FEE2E2;
+  --info: #2563EB;
+  --info-bg: #DBEAFE;
+
+  /* SLA tokens */
+  --sla-ontrack: #16A34A;
+  --sla-atrisk: #D97706;
+  --sla-breached: #DC2626;
+  --sla-paused: #6B7280;
+
+  /* Charts */
+  --chart-1: #F26722;
+  --chart-2: #2563EB;
+  --chart-3: #16A34A;
+  --chart-4: #D97706;
+  --chart-5: #7C3AED;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0D1526;
+  --sidebar-primary: #F26722;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(242, 103, 34, 0.12);
+  --sidebar-accent-foreground: #F26722;
+  --sidebar-border: #E2E5EB;
+  --sidebar-ring: #F26722;
+
+  --overlay: rgba(15, 23, 42, 0.45);
+  --chart-grid: rgba(15, 23, 42, 0.06);
+
+  --radius: 0.625rem;
+
+  /* Layout — shared spacing tokens */
+  --page-gutter: 1.25rem;
+  --header-py: 1rem;
+  --toolbar-py: 0.75rem;
+}
+
+/* ─── DARK MODE ───────────────────────────────────────────── */
+.dark {
+  color-scheme: dark;
+
+  /* Brand */
+  --brand: #F26722;
+  --brand-hover: #E0561A;
+  --brand-subtle: rgba(242, 103, 34, 0.12);
+  --navy: #0E1524;
+
+  /* Surfaces */
+  --background: #0A0F1A;
+  --surface-elevated: #0E1524;
+  --surface-2: #131C2E;
+  --foreground: #E8EDF5;
+  --card: #0E1524;
+  --card-foreground: #E8EDF5;
+  --popover: #131C2E;
+  --popover-foreground: #E8EDF5;
+
+  /* Semantic */
+  --primary: #F26722;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1A2540;
+  --secondary-foreground: #E8EDF5;
+  --muted: #1A2540;
+  --muted-foreground: #8896AF;
+  --accent: rgba(242, 103, 34, 0.15);
+  --accent-foreground: #FFA56B;
+  --destructive: #EF4444;
+  --border: rgba(255,255,255,0.08);
+  --input: rgba(255,255,255,0.1);
+  --ring: #F26722;
+
+  /* Status colors */
+  --success: #22C55E;
+  --success-bg: rgba(34,197,94,0.15);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245,158,11,0.15);
+  --danger: #EF4444;
+  --danger-bg: rgba(239,68,68,0.15);
+  --info: #3B82F6;
+  --info-bg: rgba(59,130,246,0.15);
+
+  /* SLA tokens */
+  --sla-ontrack: #22C55E;
+  --sla-atrisk: #F59E0B;
+  --sla-breached: #EF4444;
+  --sla-paused: #8896AF;
+
+  /* Charts */
+  --chart-1: #F26722;
+  --chart-2: #3B82F6;
+  --chart-3: #22C55E;
+  --chart-4: #F59E0B;
+  --chart-5: #A78BFA;
+
+  /* Sidebar — elevated surface aligned with cards in dark mode */
+  --sidebar: #0E1524;
+  --sidebar-foreground: #E8EDF5;
+  --sidebar-primary: #F26722;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(242, 103, 34, 0.15);
+  --sidebar-accent-foreground: #FFA56B;
+  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-ring: #F26722;
+
+  --overlay: rgba(0, 0, 0, 0.65);
+  --chart-grid: rgba(255, 255, 255, 0.06);
+}
+
+/* ─── BASE STYLES ─────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply bg-background;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  /* Tabular numerals for all metric/timer elements */
+  .tabular-nums,
+  .font-mono,
+  [data-ticket-id],
+  [data-timer] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ─── CUSTOM UTILITIES ────────────────────────────────────── */
+@layer utilities {
+  .brand-gradient {
+    background: linear-gradient(135deg, var(--navy) 0%, #1A3060 100%);
+  }
+  .dark .brand-gradient {
+    background: linear-gradient(135deg, #0A0F1A 0%, #131C2E 100%);
+  }
+  .surface-elevated {
+    background-color: var(--surface-elevated);
+  }
+  .border-hairline {
+    border: 1px solid var(--border);
+  }
+  /* SLA pulse for breached */
+  .sla-pulse {
+    animation: sla-pulse 2s ease-in-out infinite;
+  }
+  @keyframes sla-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  /* Scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  /* Smooth focus rings app-wide */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-brand/25 focus:border-brand;
+  }
+  /* Glass surfaces */
+  .glass {
+    @apply bg-card/90 backdrop-blur-md;
+  }
+  /* Full-width page body within app shell */
+  .page-content {
+    @apply w-full max-w-none min-w-0;
+  }
+  /* ─── Design system layout utilities ─── */
+  .workspace-header {
+    @apply border-b border-border bg-card px-4 py-4 lg:px-5;
+  }
+  .workspace-toolbar {
+    @apply flex flex-wrap items-center gap-2 border-b border-border bg-card/80 px-4 py-3 backdrop-blur-sm lg:px-5;
+  }
+  .workspace-body {
+    @apply min-h-0 min-w-0 flex-1 w-full;
+  }
+  .page-frame {
+    @apply w-full max-w-none px-4 py-4 lg:px-5 lg:py-5;
+  }
+  .page-title {
+    @apply text-xl font-bold tracking-tight text-foreground;
+  }
+  .page-subtitle {
+    @apply mt-0.5 text-[12px] leading-relaxed text-muted-foreground;
+  }
+  .kanban-board {
+    @apply flex h-full min-h-0 w-full min-w-0 gap-4 px-4 pb-4 lg:px-5 lg:pb-5;
+  }
+  .kanban-column {
+    @apply flex h-full min-h-[12rem] min-w-[240px] flex-1 flex-col rounded-xl border border-border bg-surface-2;
+  }
+}
